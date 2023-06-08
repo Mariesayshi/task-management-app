@@ -1,0 +1,42 @@
+[
+    {
+        "id": "1",
+        "name": "MergeFiles",
+        "sockets": [
+            {
+                "id": "6",
+                "name": "Merged_File",
+                "type": "File",
+                "io": "input",
+                "process": "MRTW_LightBlue"
+            },
+            {
+                "id": "7",
+                "name": "Well_File",
+                "type": "File",
+                "io": "output",
+                "process": "MRTW_DarkBlue"
+            }
+        ],
+        "processes": [
+            {
+                "id": "MRTW_LightBlue",
+                "parentProcess": null,
+                "color": "#ADD8E6"
+            },
+            {
+                "id": "MRTW_DarkBlue",
+                "parentProcess": "LightBlue",
+                "color": "#00008B"
+            }
+        ],
+        "links": [],
+        "frontendOptions": {
+            "id": "1",
+            "positionInCanvas": [
+                0,
+                0
+            ]
+        }
+    }
+]

@@ -4,8 +4,8 @@ let padding = 20;
 
 
 const createSubtask = (data) => {
-    let inputSocketsArr = createSocketsArr(data.sockets, "input", data, true );
-    let outputSocketsArr = createSocketsArr(data.sockets, "output", data, false );
+    let inputSocketsArr = createSocketsArr("input", data, true );
+    let outputSocketsArr = createSocketsArr("output", data, false );
 
     const inputSocketGroup = new fabric.Group(inputSocketsArr, {});
 
@@ -45,8 +45,8 @@ const createSubtask = (data) => {
 
     let subTaskHeadingText = new fabric.Textbox(data.name, {
       fontSize: 30,
-      fontWeight: 500,
-      fontFamily: "Roboto",
+      fontWeight: 600,
+      fontFamily: "Arial",
       originX: "left",
       originY: "top",
 
@@ -90,7 +90,7 @@ const createSubtask = (data) => {
     const createInputHeading = (heading, width, top, left = 0) => {
       return new fabric.Textbox(heading, {
         fontSize: 20,
-        fontFamily: "Roboto",
+        fontFamily: "Arial",
         originX: "left",
         originY: "top",
         top: top,

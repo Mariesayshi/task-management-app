@@ -1,129 +1,106 @@
-import { useEffect} from "react";
+import { useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import createSubtask from "../../utils/subTask";
-// import classes from "./Canvas.module.css";
-
-
-const data = {
-  id: "1",
-  name: "Task_1",
-  sockets: [
-    {
-      id: "1.i1",
-      name: "In_Socket_1",
-      type: "File",
-      io: "input",
-      process: "LightBlue",
-    },
-    {
-      id: "1.i2",
-      name: "In_Socket_2",
-      type: "String",
-      io: "input",
-      process: "DarkBlue",
-    },
-    {
-      id: "1.i3",
-      name: "In_Socket_3",
-      type: "String",
-      io: "input",
-      process: "DarkBlue",
-    },
-    {
-      id: "1.o1",
-      name: "Out_Socket_1",
-      type: "File",
-      io: "output",
-      process: "LightBlue",
-    },
-    {
-      id: "1.o2",
-      name: "Out_Socket_2",
-      type: "String",
-      io: "output",
-      process: "Orange",
-    },
-  ],
-  processes: [
-    {
-      id: "LightBlue",
-      parentProcess: null,
-      color: "#ADD8E6",
-    },
-    {
-      id: "DarkBlue",
-      parentProcess: "LightBlue",
-      color: "#00008B",
-    },
-    {
-      id: "Orange",
-      parentProcess: "DarkBlue",
-      color: "#FF9033",
-    },
-  ],
-  links: [],
-  frontendOptions: {
-    id: "1",
-    positionInCanvas: [100, 200],
-  },
-};
+import classes from "./Canvas.module.css";
+import data from "../../data/sample_2";
 
 const Canvas = () => {
+  const canvasRef = useRef(null);
+
   useEffect(() => {
+    const parent = canvasRef.current.parentElement;
     const canvas = new fabric.Canvas("c", {
-      width: 1500,
-      height: 1000,
+      width: parent.offsetWidth,
+      height: parent.offsetHeight,
+      imageSmoothingEnabled: true,
       backgroundColor: "#f5f5f5",
+      selection: false,
     });
 
-    const subTask = createSubtask(data);
+    const generateSubtasks = () => {
+      data.map((obj) => {
+        const subTask = createSubtask(obj);
+        subTask.hasControls = false;
+        canvas.add(subTask);
+      });
+    };
 
-    canvas.add(subTask);
+    generateSubtasks();
 
-    // infinite Canvas panning
+    // let font = new FontFaceObserver('Roboto')
+    // font.load().then(() => {
+    //     console.log('loaded')
 
-    let panning = false;
-    let canSelect = false;
+    //   }).catch(function() {
+    //     alert('font loading failed ' + font);
+    //   });
 
+    // listeners for panning, zooming and selection
+    const onCanvasSelection = () => {
+      let active = canvas.getActiveObject();
+      active.hasControls = false;
+    };
+
+    canvas.on("selection:created", onCanvasSelection);
+
+    canvas.on("mouse:down", function (opt) {
+      var evt = opt.e;
+      this.isDragging = true;
+      this.selection = true;
+      this.lastPosX = evt.clientX;
+      this.lastPosY = evt.clientY;
+    });
+    canvas.on("mouse:move", function (opt) {
+      if (this.isDragging && opt.e.ctrlKey === true) {
+        var e = opt.e;
+        this.selection = false;
+        var vpt = this.viewportTransform;
+        vpt[4] += e.clientX - this.lastPosX;
+        vpt[5] += e.clientY - this.lastPosY;
+        this.requestRenderAll();
+        this.lastPosX = e.clientX;
+        this.lastPosY = e.clientY;
+      }
+    });
     canvas.on("mouse:up", function () {
-      panning = false;
+      this.setViewportTransform(this.viewportTransform);
+      this.isDragging = false;
+      // this.selection = true;
     });
 
-    canvas.on("mouse:down", function (e) {
-      if (e.target === null && !canSelect) {
-        panning = true;
-        canvas.set({ selection: false });
-      } else if (e.target === null && canSelect) {
-        canvas.set({ selection: true });
+    canvas.on("mouse:wheel", function (opt) {
+      var delta = opt.e.deltaY;
+      var zoom = canvas.getZoom();
+      zoom *= 0.999 ** delta;
+      if (zoom > 5) zoom = 5;
+      if (zoom < 0.1) zoom = 0.1;
+      if (zoom < 0.5) {
+        canvas.set({ imageSmoothingEnabled: false });
       }
+      canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+      opt.e.preventDefault();
+      opt.e.stopPropagation();
     });
 
-    canvas.on("mouse:move", function (e) {
-      if (panning && e && e.e) {
-        // let units = 10;
-        let delta = new fabric.Point(e.e.movementX, e.e.movementY);
-        canvas.relativePan(delta);
-      }
+    var ro = new ResizeObserver(() => {
+      // canvas.setHeight(parent.offsetHeight);
+      // canvas.setWidth(parent.offsetWidth);
+      // canvas.renderAll();
     });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Control") {
-        canSelect = true;
-      }
-    });
+    ro.observe(parent);
 
-
-    // document.addEventListener("keyup", (e) => {
-    //   console.log(e)
-    //   if (e.key === "Control") {
-    //     canSelect = false;
-    //   }
-    // });
-
-    // Canvas Zooming here
+    return () => {
+      canvas.dispose();
+      ro.disconnect();
+    };
   }, []);
 
-  return <canvas id="c"></canvas>;
+  return (
+    <div className={classes.Canvas} ref={canvasRef}>
+      <canvas id="c"></canvas>
+    </div>
+  );
 };
 
 export default Canvas;

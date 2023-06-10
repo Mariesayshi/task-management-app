@@ -54,7 +54,7 @@ const createSocket = (socketText, processesArr, top, type, io = true) => {
   let socketTitle = new fabric.Text(socketText, {
     fontSize: 18,
     fontWeight: 500,
-    fontFamily: "Roboto",
+    fontFamily: "Arial",
     originX: "left",
     originY: "top",
     top: socketPadding + 5,
@@ -68,7 +68,7 @@ const createSocket = (socketText, processesArr, top, type, io = true) => {
 
   let socketType = new fabric.Text(type, {
     fontSize: 14,
-    fontFamily: "Roboto",
+    fontFamily: "Arial",
     originX: "left",
     originY: "top",
     top: (socketBg.height / 5) * 3,
@@ -88,16 +88,24 @@ const createSocket = (socketText, processesArr, top, type, io = true) => {
   );
 };
 
-const createSocketsArr = (arr, inputOutput, data, io) => {
-  // console.log(data)
-  return arr
+const createSocketsArr = (inputOutput, data, io) => {
+  return data.sockets
     .filter((sckt) => sckt.io === inputOutput)
     .map((sckt, i) => {
+    //   console.log(data.processes, sckt.process);
       let processObj = data.processes.find((o) => o.id === sckt.process);
+    //   console.log(processObj);
 
       let processesArr = [];
-      processesArr.push(processObj);
-      let parentProcess = processObj.parentProcess;
+      let parentProcess;
+
+      //   in case fn can't find a process in processes array
+      if (processObj !== undefined) {
+        processesArr.push(processObj);
+        parentProcess = processObj.parentProcess;
+      } else {
+        parentProcess = null;
+      }
 
       while (parentProcess !== null) {
         let parentProcessObj = data.processes.find(

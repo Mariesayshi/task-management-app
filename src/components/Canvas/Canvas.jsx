@@ -28,10 +28,23 @@ const Canvas = () => {
 
     generateSubtasks();
 
+    const onKeydown = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        canvas.selection = true;
+      }
+    };
+    const onKeyup = (e) => {
+      if (e.key === "Control" || e.key === "Command") {
+        canvas.selection = false;
+      }
+    };
+
+    document.addEventListener("keydown", onKeydown);
+    document.addEventListener("keyup", onKeyup);
 
     addInfiniteCanvasListeners(canvas);
 
-    var ro = new ResizeObserver(() => {
+    let ro = new ResizeObserver(() => {
       canvas.setHeight(parent.offsetHeight);
       canvas.setWidth(parent.offsetWidth);
       canvas.renderAll();
@@ -41,6 +54,8 @@ const Canvas = () => {
 
     return () => {
       canvas.dispose();
+      document.removeEventListener("keydown", onKeydown);
+      document.removeEventListener("keyup", onKeyup);
       ro.disconnect();
     };
   }, []);

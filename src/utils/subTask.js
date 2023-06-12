@@ -8,7 +8,7 @@ const dimensions = {
     fill: "#e6e6e6e",
     stroke: "#2f0037",
     strokeWidth: 5,
-    width:500,
+    width:600,
     height: 230,
   },
   subTaskHeading: { height: 60, fill: "#e6e6e6" },

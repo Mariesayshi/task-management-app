@@ -1,11 +1,13 @@
-const addInfiniteCanvasListeners = (canvas) => {
+const addCanvasListeners = (canvas) => {
   canvas.on("selection:created", () => {
     let active = canvas.getActiveObject();
     active.hasControls = false;
   });
 
+
+  
   canvas.on("mouse:down", (opt) => {
-    if (canvas.selection || opt.target) {
+    if (canvas.selecion || opt.target) {
       canvas.isDragging = false;
     } else {
       let evt = opt.e;
@@ -50,4 +52,4 @@ const addInfiniteCanvasListeners = (canvas) => {
   });
 };
 
-export default addInfiniteCanvasListeners;
+export default addCanvasListeners;

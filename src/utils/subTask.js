@@ -1,9 +1,9 @@
 import { fabric } from "fabric";
 import createSocketsArr from "./sockets";
-let padding = 10;
-// let socketPadding = 10;
 
-const dimensions = {
+const padding = 10;
+
+const guide = {
   subTaskBg: {
     fill: "#e6e6e6e",
     stroke: "#2f0037",
@@ -24,25 +24,25 @@ const dimensions = {
   
 };
 const createSubtask = (data) => {
-  let inputSocketsArr = createSocketsArr(dimensions,"input", data, true);
-  let outputSocketsArr = createSocketsArr(dimensions,"output", data, false);
+  let inputSocketsArr = createSocketsArr(guide,"input", data, true);
+  let outputSocketsArr = createSocketsArr(guide,"output", data, false);
 
   const inputSocketGroup = new fabric.Group(inputSocketsArr, {});
 
   const outputSocketGroup = new fabric.Group(outputSocketsArr, {});
 
   let subTaskBg = new fabric.Rect({
-    fill: dimensions.subTaskBg.fill,
-    stroke: dimensions.subTaskBg.fill,
-    strokeWidth: dimensions.subTaskBg.strokeWidth,
-    width: dimensions.subTaskBg.width,
-    height: dimensions.subTaskBg.height,
+    fill: guide.subTaskBg.fill,
+    stroke: guide.subTaskBg.fill,
+    strokeWidth: guide.subTaskBg.strokeWidth,
+    width: guide.subTaskBg.width,
+    height: guide.subTaskBg.height,
   });
 
   let subTaskHeading = new fabric.Rect({
-    fill: dimensions.subTaskHeading.fill,
+    fill: guide.subTaskHeading.fill,
     width: subTaskBg.width - subTaskBg.strokeWidth,
-    height: dimensions.subTaskHeading.height,
+    height: guide.subTaskHeading.height,
     originX: "left",
     originY: "top",
     strokeWidth: 0,
@@ -64,8 +64,8 @@ const createSubtask = (data) => {
   }
 
   let subTaskHeadingText = new fabric.Textbox(data.name, {
-    fontSize: dimensions.subTaskHeadingText.fontSize,
-    fontWeight: dimensions.subTaskHeadingText.fontWeight,
+    fontSize: guide.subTaskHeadingText.fontSize,
+    fontWeight: guide.subTaskHeadingText.fontWeight,
     fontFamily: "Arial",
     originX: "left",
     originY: "center",
@@ -77,7 +77,7 @@ const createSubtask = (data) => {
   let input = new fabric.Rect({
     width: subTaskHeading.width / 2,
     height: subTaskBg.height - subTaskBg.strokeWidth,
-    fill: dimensions.input.fill,
+    fill: guide.input.fill,
     originX: "left",
     originY: "top",
     top: subTaskBg.strokeWidth,
@@ -88,7 +88,7 @@ const createSubtask = (data) => {
   let output = new fabric.Rect({
     width: subTaskHeading.width / 2,
     height: subTaskBg.height - subTaskBg.strokeWidth,
-    fill: dimensions.output.fill,
+    fill: guide.output.fill,
     originX: "left",
     originY: "top",
     top: subTaskBg.strokeWidth,
@@ -107,7 +107,7 @@ const createSubtask = (data) => {
 
   const createInputHeading = (heading, width, top, left = 0) => {
     return new fabric.Textbox(heading, {
-      fontSize: dimensions.inputHeading.fontSize,
+      fontSize: guide.inputHeading.fontSize,
       fontFamily: "Arial",
       originX: "left",
       originY: "top",

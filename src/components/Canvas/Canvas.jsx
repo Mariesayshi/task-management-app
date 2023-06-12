@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import createSubtask from "../../utils/subTask";
-import addInfiniteCanvasListeners from "../../utils/infiniteCanvas";
+import addCanvasListeners from "../../utils/canvasListeners";
 import classes from "./Canvas.module.css";
 import data from "../../data/sample_2";
 
@@ -15,34 +15,8 @@ const Canvas = () => {
       height: parent.offsetHeight,
       imageSmoothingEnabled: true,
       backgroundColor: "#f5f5f5",
-      selection: false,
+      selection: true,
     });
-
-    const generateSubtasks = () => {
-      data.map((obj) => {
-        const subTask = createSubtask(obj);
-        subTask.hasControls = false;
-        canvas.add(subTask);
-      });
-    };
-
-    generateSubtasks();
-
-    const onKeydown = (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        canvas.selection = true;
-      }
-    };
-    const onKeyup = (e) => {
-      if (e.key === "Control" || e.key === "Command") {
-        canvas.selection = false;
-      }
-    };
-
-    document.addEventListener("keydown", onKeydown);
-    document.addEventListener("keyup", onKeyup);
-
-    addInfiniteCanvasListeners(canvas);
 
     let ro = new ResizeObserver(() => {
       canvas.setHeight(parent.offsetHeight);
@@ -52,10 +26,34 @@ const Canvas = () => {
 
     ro.observe(parent);
 
+    data.map((obj) => {
+      const subTask = createSubtask(obj);
+      subTask.hasControls = false;
+      canvas.add(subTask);
+      canvas.renderAll();
+    });
+
+    const onKeydown = (e) => {
+      if (e.key === "Control" || e.key === "Command") {
+        canvas.selection = false;
+      }
+    };
+
+    const onKeyup = (e) => {
+      if (e.key === "Control" || e.key === "Command") {
+        canvas.selection = true;
+      }
+    };
+
+    document.addEventListener("keydown", onKeydown);
+    document.addEventListener("keyup", onKeyup);
+
+    addCanvasListeners(canvas);
+
     return () => {
-      canvas.dispose();
       document.removeEventListener("keydown", onKeydown);
       document.removeEventListener("keyup", onKeyup);
+      canvas.dispose();
       ro.disconnect();
     };
   }, []);

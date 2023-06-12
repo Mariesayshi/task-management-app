@@ -1,10 +1,9 @@
 import { fabric } from "fabric";
 
-let padding = 10;
-let socketPadding = 10;
+const padding = 10;
 
 const createSocket = (
-  dimensions,
+  guide,
   socketText,
   processesArr,
   top,
@@ -13,24 +12,24 @@ const createSocket = (
 ) => {
   let socketBg = new fabric.Rect({
     fill: "transparent",
-    width: dimensions.subTaskBg.width / 2 -dimensions.subTaskBg.strokeWidth + 1,
-    height: dimensions.socketBg.height,
+    width: guide.subTaskBg.width / 2 -guide.subTaskBg.strokeWidth + 1,
+    height: guide.socketBg.height,
     originX:'left',
-    left: dimensions.subTaskBg.strokeWidth,
+    left: guide.subTaskBg.strokeWidth,
   });
 
   let socketRect = new fabric.Rect({
-    width: socketBg.height - 2 * socketPadding,
-    height: socketBg.height - 2 * socketPadding,
+    width: socketBg.height - 2 * padding,
+    height: socketBg.height - 2 * padding,
     fill: "white",
     stroke: "black",
     strokeWidth: 1,
-    top: socketPadding,
+    top: padding,
   });
 
   socketRect.set({
     left: io
-      ? dimensions.subTaskBg.strokeWidth + padding
+      ? guide.subTaskBg.strokeWidth + padding
       : socketBg.width - socketRect.width - padding,
   });
 
@@ -42,7 +41,7 @@ const createSocket = (
         fill: process.color,
         originX: "left",
         originY: "top",
-        top: socketPadding,
+        top: padding,
         strokeWidth: 0,
         left: io
           ? 5 +
@@ -62,24 +61,24 @@ const createSocket = (
   processesRect.set({});
 
   let socketTitle = new fabric.Text(socketText, {
-    fontSize: dimensions.socketTitle.fontSize,
+    fontSize: guide.socketTitle.fontSize,
     fontFamily: "Arial",
 
-    fontWeight: dimensions.socketTitle.fontWeight,
+    fontWeight: guide.socketTitle.fontWeight,
 
     originX: "left",
     originY: "top",
-    top: socketPadding + dimensions.subTaskBg.strokeWidth,
+    top: padding + guide.subTaskBg.strokeWidth,
   });
 
   socketTitle.set({
     left: io
-      ? 2.5 + padding + socketRect.width + processesRect.width + socketPadding
-      : processesRect.left - socketTitle.width - socketPadding,
+      ? 2.5 + padding + socketRect.width + processesRect.width + padding
+      : processesRect.left - socketTitle.width - padding,
   });
 
   let socketType = new fabric.Text(type, {
-    fontSize: dimensions.socketType.fontSize,
+    fontSize: guide.socketType.fontSize,
     fontFamily: "Arial",
     originX: "left",
     originY: "top",
@@ -89,7 +88,7 @@ const createSocket = (
   socketType.set({
     left: io
       ? socketTitle.left
-      : processesRect.left - socketType.width - socketPadding,
+      : processesRect.left - socketType.width - padding,
   });
 
   return new fabric.Group(
@@ -100,7 +99,7 @@ const createSocket = (
   );
 };
 
-const createSocketsArr = (dimensions, inputOutput, data, io) => {
+const createSocketsArr = (guide, inputOutput, data, io) => {
   return data.sockets
     .filter((sckt) => sckt.io === inputOutput)
     .map((sckt, i) => {
@@ -131,10 +130,10 @@ const createSocketsArr = (dimensions, inputOutput, data, io) => {
       }
 
       return createSocket(
-        dimensions,
+        guide,
         sckt.name,
         processesArr,
-        0 + dimensions.socketBg.height * i,
+        0 + guide.socketBg.height * i,
         sckt.type,
         io
       );

@@ -104,9 +104,7 @@ const createSocketsArr = (dimensions, inputOutput, data, io) => {
   return data.sockets
     .filter((sckt) => sckt.io === inputOutput)
     .map((sckt, i) => {
-      //   console.log(data.processes, sckt.process);
       let processObj = data.processes.find((o) => o.id === sckt.process);
-      //   console.log(processObj);
 
       let processesArr = [];
       let parentProcess;

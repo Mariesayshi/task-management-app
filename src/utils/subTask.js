@@ -23,9 +23,6 @@ const dimensions = {
   socketType: {fontSize: 14,}
   
 };
-
-console.log(dimensions);
-
 const createSubtask = (data) => {
   let inputSocketsArr = createSocketsArr(dimensions,"input", data, true);
   let outputSocketsArr = createSocketsArr(dimensions,"output", data, false);

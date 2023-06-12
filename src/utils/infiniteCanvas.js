@@ -37,9 +37,12 @@ const addInfiniteCanvasListeners = (canvas) => {
         var zoom = canvas.getZoom();
         zoom *= 0.999 ** delta;
         if (zoom > 5) zoom = 5;
-        if (zoom < 0.1) zoom = 0.1;
+        if (zoom < 0.3) zoom = 0.3;
         if (zoom < 0.5) {
           canvas.set({ imageSmoothingEnabled: false });
+        }else{
+          canvas.set({ imageSmoothingEnabled: true });
+
         }
         canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
         opt.e.preventDefault();

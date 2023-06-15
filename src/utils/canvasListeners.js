@@ -8,17 +8,18 @@ const addCanvasListeners = (canvas) => {
   // panning
   canvas.on("mouse:down", (opt) => {
     if (opt.button === 2) {
+      canvas.defaultCursor = "grab";
       canvas.selection = false;
       canvas.isDragging = true;
       let evt = opt.e;
       canvas.lastPosX = evt.clientX;
       canvas.lastPosY = evt.clientY;
     }
-
   });
 
   canvas.on("mouse:move", (opt) => {
     if (canvas.isDragging && !canvas.selection) {
+      canvas.defaultCursor = "grabbing";
       let e = opt.e;
       let vpt = canvas.viewportTransform;
       vpt[4] += e.clientX - canvas.lastPosX;
@@ -33,6 +34,7 @@ const addCanvasListeners = (canvas) => {
     if (opt.button === 2) {
       canvas.isDragging = false;
       canvas.selection = true;
+      canvas.defaultCursor = "auto";
     }
     canvas.setViewportTransform(canvas.viewportTransform);
   });

@@ -62,9 +62,7 @@ const createSocket = (
   let socketTitle = new fabric.Text(socketText, {
     fontSize: guide.socketTitle.fontSize,
     fontFamily: "Arial",
-
     fontWeight: guide.socketTitle.fontWeight,
-
     originX: "left",
     originY: "top",
     top: padding + guide.subTaskBg.strokeWidth,

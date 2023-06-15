@@ -20,7 +20,6 @@ const Canvas = () => {
       selection: true,
     });
 
-    
     let ro = new ResizeObserver(() => {
       canvas.setHeight(parent.offsetHeight);
       canvas.setWidth(parent.offsetWidth);
@@ -29,20 +28,18 @@ const Canvas = () => {
 
     ro.observe(parent);
 
-
-// generating and adding to canvas all the subTasks from the data object
+    // generating and adding to canvas all the subTasks from the data object
     data.map((obj, i) => {
       const subTask = createSubtask(obj);
       subTask.hasControls = false;
-      subTask.id = 'task_'+(i+1);
+      subTask.id = "task_" + (i + 1);
       canvas.add(subTask);
       canvas.renderAll();
     });
 
     addCanvasListeners(canvas);
 
-
-    // returning cleanup functions for resize obzerver, canvas. 
+    // returning cleanup functions for resize obzerver, canvas.
     return () => {
       canvas.dispose();
       ro.disconnect();

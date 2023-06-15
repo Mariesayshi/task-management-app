@@ -58,7 +58,6 @@ const createSocket = (
 
   const processesRect = new fabric.Group(createProcesses(socketRect.width / 2));
 
-  // processesRect.set({});
 
   let socketTitle = new fabric.Text(socketText, {
     fontSize: guide.socketTitle.fontSize,
@@ -129,7 +128,7 @@ const createSocketsArr = (guide, inputOutput, data, io) => {
         parentProcess = parentProcessObj.parentProcess;
       }
 
-      // creating each socket from data.sockets
+      // creating each socket from the collected data
       return createSocket(
         guide,
         sckt.name,

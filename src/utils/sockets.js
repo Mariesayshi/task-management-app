@@ -12,9 +12,9 @@ const createSocket = (
 ) => {
   let socketBg = new fabric.Rect({
     fill: "transparent",
-    width: guide.subTaskBg.width / 2 -guide.subTaskBg.strokeWidth + 1,
+    width: guide.subTaskBg.width / 2 - guide.subTaskBg.strokeWidth + 1,
     height: guide.socketBg.height,
-    originX:'left',
+    originX: "left",
     left: guide.subTaskBg.strokeWidth,
   });
 
@@ -44,7 +44,7 @@ const createSocket = (
         top: padding,
         strokeWidth: 0,
         left: io
-          ? 5 +
+          ? guide.subTaskBg.strokeWidth +
             padding +
             socketRect.width +
             (processWidth / processesArr.length) * i
@@ -58,7 +58,7 @@ const createSocket = (
 
   const processesRect = new fabric.Group(createProcesses(socketRect.width / 2));
 
-  processesRect.set({});
+  // processesRect.set({});
 
   let socketTitle = new fabric.Text(socketText, {
     fontSize: guide.socketTitle.fontSize,
@@ -73,7 +73,7 @@ const createSocket = (
 
   socketTitle.set({
     left: io
-      ? 2.5 + padding + socketRect.width + processesRect.width + padding
+      ? guide.subTaskBg.strokeWidth/2 + padding + socketRect.width + processesRect.width + padding
       : processesRect.left - socketTitle.width - padding,
   });
 
@@ -103,12 +103,13 @@ const createSocketsArr = (guide, inputOutput, data, io) => {
   return data.sockets
     .filter((sckt) => sckt.io === inputOutput)
     .map((sckt, i) => {
+      // finding a starting process object for a socket
       let processObj = data.processes.find((o) => o.id === sckt.process);
 
       let processesArr = [];
       let parentProcess;
 
-      //   in case fn can't find a process in processes array
+      //   in case can't find a process in processes array
       if (processObj !== undefined) {
         processesArr.push(processObj);
         parentProcess = processObj.parentProcess;
@@ -116,19 +117,19 @@ const createSocketsArr = (guide, inputOutput, data, io) => {
         parentProcess = null;
       }
 
+      // finding all the parent processes of the starting process and storing them in a processesArr array
       while (parentProcess !== null) {
         let parentProcessObj = data.processes.find(
           (o) => o.id === parentProcess
         );
-
         if (parentProcess === parentProcessObj.parentProcess) {
           break;
         }
         processesArr.push(parentProcessObj);
-
         parentProcess = parentProcessObj.parentProcess;
       }
 
+      // creating each socket from data.sockets
       return createSocket(
         guide,
         sckt.name,

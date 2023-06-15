@@ -9,15 +9,18 @@ const Canvas = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    // creating canvas, making it responsive to it's parents dimensions (stored in useRefm, obzerved by ro)
     const parent = canvasRef.current.parentElement;
     const canvas = new fabric.Canvas("c", {
       width: parent.offsetWidth,
       height: parent.offsetHeight,
       imageSmoothingEnabled: true,
+      fireMiddleClick: true,
       backgroundColor: "#f5f5f5",
       selection: true,
     });
 
+    
     let ro = new ResizeObserver(() => {
       canvas.setHeight(parent.offsetHeight);
       canvas.setWidth(parent.offsetWidth);
@@ -26,13 +29,18 @@ const Canvas = () => {
 
     ro.observe(parent);
 
-    data.map((obj) => {
+
+// generating and adding to canvas all the subTasks from the data object
+    data.map((obj, i) => {
       const subTask = createSubtask(obj);
       subTask.hasControls = false;
+      subTask.id = 'task_'+(i+1);
       canvas.add(subTask);
       canvas.renderAll();
     });
 
+
+    // setting panning and zoomming and their controls
     const onKeydown = (e) => {
       if (e.key === "Control" || e.key === "Command") {
         canvas.selection = false;
@@ -45,11 +53,13 @@ const Canvas = () => {
       }
     };
 
-    document.addEventListener("keydown", onKeydown);
+    document. addEventListener("keydown", onKeydown);
     document.addEventListener("keyup", onKeyup);
 
     addCanvasListeners(canvas);
 
+
+    // returning cleanup functions for the listeners, resize obzerver, canvas. 
     return () => {
       document.removeEventListener("keydown", onKeydown);
       document.removeEventListener("keyup", onKeyup);

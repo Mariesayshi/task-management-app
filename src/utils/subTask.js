@@ -3,6 +3,7 @@ import createSocketsArr from "./sockets";
 
 const padding = 10;
 
+// general dimensions of the subTask
 const guide = {
   subTaskBg: {
     fill: "#e6e6e6e",
@@ -21,16 +22,11 @@ const guide = {
   stroke: "black",}, 
   socketTitle: {fontSize: 18,fontWeight: 600,},
   socketType: {fontSize: 14,}
-  
+
 };
+
+// subTask creation function
 const createSubtask = (data) => {
-  let inputSocketsArr = createSocketsArr(guide,"input", data, true);
-  let outputSocketsArr = createSocketsArr(guide,"output", data, false);
-
-  const inputSocketGroup = new fabric.Group(inputSocketsArr, {});
-
-  const outputSocketGroup = new fabric.Group(outputSocketsArr, {});
-
   let subTaskBg = new fabric.Rect({
     fill: guide.subTaskBg.fill,
     stroke: guide.subTaskBg.fill,
@@ -50,6 +46,13 @@ const createSubtask = (data) => {
     left: subTaskBg.strokeWidth,
   });
 
+  // creating socket array from createSocketsArr function, and turning them to a group
+  let inputSocketsArr = createSocketsArr(guide,"input", data, true);
+  let outputSocketsArr = createSocketsArr(guide,"output", data, false);
+  const inputSocketGroup = new fabric.Group(inputSocketsArr, {});
+  const outputSocketGroup = new fabric.Group(outputSocketsArr, {});
+
+  // making subTaskHeight responsive to Sockets group's height 
   if (inputSocketGroup.height || outputSocketGroup.height >= input.height) {
     let newH;
     if (inputSocketGroup.height >= outputSocketGroup.height) {
@@ -57,7 +60,6 @@ const createSubtask = (data) => {
     } else {
       newH = outputSocketGroup.height;
     }
-
     subTaskBg.set({
       height: newH + subTaskHeading.height + 80,
     });
@@ -105,6 +107,7 @@ const createSubtask = (data) => {
     left: output.left,
   });
 
+  // creating 'input/output' headings of the subTask
   const createInputHeading = (heading, width, top, left = 0) => {
     return new fabric.Textbox(heading, {
       fontSize: guide.inputHeading.fontSize,
@@ -130,6 +133,8 @@ const createSubtask = (data) => {
     subTaskBg.strokeWidth + input.width
   );
 
+
+  // adding all the elements of the subTask to a group
   return new fabric.Group(
     [
       subTaskBg,

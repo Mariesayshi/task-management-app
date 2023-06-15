@@ -39,30 +39,11 @@ const Canvas = () => {
       canvas.renderAll();
     });
 
-
-    // setting selection, panning and zoomming and their controls
-    // const onKeydown = (e) => {
-    //   if (e.key === "Control" || e.key === "Command") {
-    //     canvas.selection = false;
-    //   }
-    // };
-
-    // const onKeyup = (e) => {
-    //   if (e.key === "Control" || e.key === "Command") {
-    //     canvas.selection = true;
-    //   }
-    // };
-
-    // document. addEventListener("keydown", onKeydown);
-    // document.addEventListener("keyup", onKeyup);
-
     addCanvasListeners(canvas);
 
 
-    // returning cleanup functions for the listeners, resize obzerver, canvas. 
+    // returning cleanup functions for resize obzerver, canvas. 
     return () => {
-      // document.removeEventListener("keydown", onKeydown);
-      // document.removeEventListener("keyup", onKeyup);
       canvas.dispose();
       ro.disconnect();
     };

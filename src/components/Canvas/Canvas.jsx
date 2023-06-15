@@ -9,7 +9,7 @@ const Canvas = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    // creating canvas, making it responsive to it's parents dimensions (stored in useRefm, obzerved by ro)
+    // creating canvas, making it responsive to it's parent's dimensions (by obzerving with ro)
     const parent = canvasRef.current.parentElement;
     const canvas = new fabric.Canvas("c", {
       width: parent.offsetWidth,
@@ -40,29 +40,29 @@ const Canvas = () => {
     });
 
 
-    // setting panning and zoomming and their controls
-    const onKeydown = (e) => {
-      if (e.key === "Control" || e.key === "Command") {
-        canvas.selection = false;
-      }
-    };
+    // setting selection, panning and zoomming and their controls
+    // const onKeydown = (e) => {
+    //   if (e.key === "Control" || e.key === "Command") {
+    //     canvas.selection = false;
+    //   }
+    // };
 
-    const onKeyup = (e) => {
-      if (e.key === "Control" || e.key === "Command") {
-        canvas.selection = true;
-      }
-    };
+    // const onKeyup = (e) => {
+    //   if (e.key === "Control" || e.key === "Command") {
+    //     canvas.selection = true;
+    //   }
+    // };
 
-    document. addEventListener("keydown", onKeydown);
-    document.addEventListener("keyup", onKeyup);
+    // document. addEventListener("keydown", onKeydown);
+    // document.addEventListener("keyup", onKeyup);
 
     addCanvasListeners(canvas);
 
 
     // returning cleanup functions for the listeners, resize obzerver, canvas. 
     return () => {
-      document.removeEventListener("keydown", onKeydown);
-      document.removeEventListener("keyup", onKeyup);
+      // document.removeEventListener("keydown", onKeydown);
+      // document.removeEventListener("keyup", onKeyup);
       canvas.dispose();
       ro.disconnect();
     };

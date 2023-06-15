@@ -1,30 +1,26 @@
 const addCanvasListeners = (canvas) => {
-
-// removing scaling, skewing, flipping etc. controls from active/selected elements. 
+  // removing scaling, skewing, flipping etc. controls from active/selected elements.
   canvas.on("selection:created", () => {
     let active = canvas.getActiveObject();
     active.hasControls = false;
   });
 
-
-  // panning 
+  // panning
   canvas.on("mouse:down", (opt) => {
-    console.log(opt)
-    if (canvas.selection || opt.target) {
-      canvas.isDragging = false;
-    } else {
-      let evt = opt.e;
+    if (opt.button === 2) {
+      canvas.selection = false;
       canvas.isDragging = true;
+      let evt = opt.e;
       canvas.lastPosX = evt.clientX;
       canvas.lastPosY = evt.clientY;
     }
+
   });
 
   canvas.on("mouse:move", (opt) => {
     if (canvas.isDragging && !canvas.selection) {
       let e = opt.e;
       let vpt = canvas.viewportTransform;
-      console.log(vpt)
       vpt[4] += e.clientX - canvas.lastPosX;
       vpt[5] += e.clientY - canvas.lastPosY;
       canvas.requestRenderAll();
@@ -33,10 +29,12 @@ const addCanvasListeners = (canvas) => {
     }
   });
 
-  canvas.on("mouse:up", () => {
+  canvas.on("mouse:up", (opt) => {
+    if (opt.button === 2) {
+      canvas.isDragging = false;
+      canvas.selection = true;
+    }
     canvas.setViewportTransform(canvas.viewportTransform);
-
-    canvas.isDragging = false;
   });
 
   // zoomming

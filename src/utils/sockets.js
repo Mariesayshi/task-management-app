@@ -58,7 +58,6 @@ const createSocket = (
 
   const processesRect = new fabric.Group(createProcesses(socketRect.width / 2));
 
-
   let socketTitle = new fabric.Text(socketText, {
     fontSize: guide.socketTitle.fontSize,
     fontFamily: "Arial",
@@ -70,7 +69,11 @@ const createSocket = (
 
   socketTitle.set({
     left: io
-      ? guide.subTaskBg.strokeWidth/2 + padding + socketRect.width + processesRect.width + padding
+      ? guide.subTaskBg.strokeWidth / 2 +
+        padding +
+        socketRect.width +
+        processesRect.width +
+        padding
       : processesRect.left - socketTitle.width - padding,
   });
 
@@ -111,6 +114,7 @@ const createSocketsArr = (guide, inputOutput, data, io) => {
         processesArr.push(processObj);
         parentProcess = processObj.parentProcess;
       } else {
+        console.error(`Couldn't find the process: '${sckt.process}' for the socket. id: ${sckt.id}, name: ${sckt.name}`);
         parentProcess = null;
       }
 
@@ -120,6 +124,8 @@ const createSocketsArr = (guide, inputOutput, data, io) => {
           (o) => o.id === parentProcess
         );
         if (parentProcess === parentProcessObj.parentProcess) {
+          console.error(`Parent process is the same as the current process. process: ${sckt.process}, socket id: ${sckt.id}, socket name: ${sckt.name}`);
+
           break;
         }
         processesArr.push(parentProcessObj);
